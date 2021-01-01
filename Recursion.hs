@@ -41,18 +41,6 @@ helper2 acc1 acc2 n  | n == 0 = acc1
                     | n < 0 = helper2 acc2 (acc1 - acc2) (n + 1)
 
 
---fibonacci :: Int -> Int
---fibonacci n | n > 0 = fibonacciPositiveHelper 0 n
---			| otherwise = fibonacciNegativeHelper 0 n
---
---fibonacciPositiveHelper acc2 0 = 0
---fibonacciPositiveHelper acc2 1 = 1
---fibonacciPositiveHelper acc2 n = acc2 + fibonacciPositiveHelper (acc2 + n - 1) (n - 1)
---
---fibonacciNegativeHelper acc3 0 = 0
---fibonacciNegativeHelper acc3 (- 1) = 1
---fibonacciNegativeHelper acc3 n = acc3 - fibonacciNegativeHelper (acc3 - n + 2) (n + 1)
-
 seqA :: Integer -> Integer
 seqA n | n == 0 = 1
        | n == 1 = 2
@@ -61,3 +49,20 @@ seqA n | n == 0 = 1
                      recurrently acc1 acc2 acc3 0 = acc1
                      recurrently acc1 acc2 acc3 n = recurrently acc2 acc3 ((acc3 + acc2) - 2*acc1) (n-1)
                    in recurrently 1 2 3 n
+
+
+--Реализуйте функцию, находящую сумму и количество цифр десятичной записи заданного целого числа.
+sum'n'count :: Integer -> (Integer, Integer)
+sum'n'count x = if x > 0 then helper x 0 0 else helper (-x) 0 0
+    where
+        helper 0 0 0 = (0, 1)
+        helper 0 sum count = (sum, count)
+        helper x sum count = helper (x `div` 10) (sum + x `mod` 10) (count + 1)
+
+
+--Реализуйте функцию, находящую значение определённого интеграла от заданной функции ff на заданном интервале [a,b][a,b] методом трапеций.
+-- (Используйте равномерную сетку; достаточно 1000 элементарных отрезков.)
+integration :: (Double -> Double) -> Double -> Double -> Double
+integration f a b = integ f a b 1000 where
+	integ f a b 0 = 0
+	integ f a b n = h * (f (a) + f (a + h)) / 2 + integ f (a + h) b (n - 1) where h = (b - a) / n
