@@ -10,12 +10,13 @@
 --should return "found the needle at position 5"
 import Data.Maybe
 import Data.List
+import qualified Data.Char as Char
 
 findNeedle :: [String] -> String
 findNeedle list= "found the needle at position " ++ show (fromJust $ elemIndex "needle" list)
 
 ----------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
+
 --
 --Given an array of integers, return a new array with each value doubled.
 --
@@ -101,3 +102,17 @@ repeatStr :: Int -> String -> String
 repeatStr n str | n == 1 = str
                 | n > 1  = str ++ repeatStr (n - 1) str
 
+----------------------------------------------------------------------------------------------------------------
+--Jaden Smith, the son of Will Smith, is the star of films such as The Karate Kid (2010) and After Earth (2013).
+--Jaden is also known for some of his philosophy that he delivers via Twitter.
+--When writing on Twitter, he is known for almost always capitalizing every word. For simplicity, you'll have to capitalize each word, check out how contractions are expected to be in the example below.
+--
+--Your task is to convert strings to how they would be written by Jaden Smith.
+-- The strings are actual quotes from Jaden Smith, but they are not capitalized in the same way he originally typed them.
+
+
+toJadenCase :: String -> String
+toJadenCase [] = []
+toJadenCase js = unwords $ map capWord $ words js
+
+capWord word = [Char.toUpper $ head word] ++ (map Char.toLower $ tail word)
