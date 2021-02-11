@@ -157,3 +157,41 @@ divisors a | a < 2 = Left "arg must be > 1"
 
 getDivisors a = [x | x <- [2..a`div`2], a `rem` x == 0]
 -----------------------------------------------------------------------------------------------------------
+--There is an array with some numbers. All numbers are equal except for one. Try to find it!
+--
+--getUnique [1, 1, 1, 2, 1, 1] -- Result is 2
+--getUnique [0, 0, 0.55, 0, 0] -- Result is 0.55
+--It’s guaranteed that array contains at least 3 numbers.
+--
+--The tests contain some very huge arrays, so think about performance.
+
+
+isMember x [] = False
+isMember x (y : ys)
+   | x == y = True
+   | otherwise = isMember x ys
+
+isMemberTwice x [] = False
+isMemberTwice x (y : ys)
+   | x == y =  True && isMember x ys
+   | otherwise = isMemberTwice x ys
+
+
+getUnique :: [Int] -> Int
+getUnique list = head $ filter (\x -> not (isMemberTwice x list)) list
+
+---------------------------------------------------------------------------------------------------------------
+--Digital root is the recursive sum of all the digits in a number.
+--
+--Given n, take the sum of the digits of n.
+--If that value has more than one digit, continue reducing in this way until a single-digit number is produced. The input will be a non-negative integer.
+
+
+digs :: Integral a => a -> [a]
+digs 0 = []
+digs n = digs (n `div` 10) ++ [n `mod` 10]
+
+--digitalRoot :: Integral a => a -> a
+digitalRoot x  | length ((show::Integer->String) (sum (digs x))) < 2 = sum (digs x)
+               | otherwise = digitalRoot (sum (digs x))
+
