@@ -16,3 +16,13 @@ isPalindrom list = list == reverse list where
 --[11,7,3]
 sum3 :: Num a => [a] -> [a] -> [a] -> [a]
 sum3 a b c = map sum (transpose [a,b,c])
+
+----------------------------------------------------------
+{-Реализуйте функцию filterDisj, принимающую два унарных предиката и список,
+ и возвращающую список элементов, удовлетворяющих хотя бы одному из предикатов.
+
+GHCi> filterDisj (< 10) odd [7,8,10,11,12]
+[7,8,11]
+-}
+filterDisj :: (a -> Bool) -> (a -> Bool) -> [a] -> [a]
+filterDisj pred1 pred2 list= filter (\x -> pred1 x || pred2 x) list
