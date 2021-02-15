@@ -1,4 +1,5 @@
 import Data.List
+import Data.Char
 
 oddsOnly =  filter (odd)
 
@@ -16,3 +17,13 @@ isPalindrom list = list == reverse list where
 --[11,7,3]
 sum3 :: Num a => [a] -> [a] -> [a] -> [a]
 sum3 a b c = map sum (transpose [a,b,c])
+-----------------------------------------------
+--Напишите функцию readDigits, принимающую строку и возвращающую пару строк.
+--Первый элемент пары содержит цифровой префикс исходной строки, а второй - ее оставшуюся часть.
+--GHCi> readDigits "365ads"
+--("365","ads")
+--GHCi> readDigits "365"
+--("365","")
+
+readDigits :: String -> (String, String)
+readDigits = span $ isDigit
