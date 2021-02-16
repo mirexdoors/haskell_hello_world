@@ -1,4 +1,5 @@
 import Data.List
+import Data.Char
 
 oddsOnly =  filter (odd)
 
@@ -28,8 +29,6 @@ sum3 a b c = map sum (transpose [a,b,c])
 readDigits :: String -> (String, String)
 readDigits = span $ isDigit
 
-
-
 ----------------------------------------------------------
 {-Реализуйте функцию filterDisj, принимающую два унарных предиката и список,
  и возвращающую список элементов, удовлетворяющих хотя бы одному из предикатов.
@@ -39,3 +38,22 @@ GHCi> filterDisj (< 10) odd [7,8,10,11,12]
 -}
 filterDisj :: (a -> Bool) -> (a -> Bool) -> [a] -> [a]
 filterDisj pred1 pred2 list= filter (\x -> pred1 x || pred2 x) list
+
+----------------------------------------------------------
+{-Напишите реализацию функции qsort.
+Функция qsort должная принимать на вход список элементов и сортировать его в порядке возрастания с помощью сортировки Хоара:
+ для какого-то элемента x изначального списка (обычно выбирают первый) делить список на элементы меньше и не меньше x,
+ и потом запускаться рекурсивно на обеих частях. -}
+
+qsort :: Ord a => [a] -> [a]
+qsort [] = []
+qsort [x] = [x]
+qsort (x:xs) = (qsort ys) ++ [x] ++ (qsort zs) where
+    ys = filter (< x) (x:xs)
+    zs = filter (> x) (x:xs)
+
+qsort1 :: Ord a => [a] -> [a]
+qsort1 [] = []
+qsort1 [x] = [x]
+qsort1 (x:xs) = (qsort1 lessPart) ++ [x] ++ (qsort1 morePart) where
+   (lessPart, morePart) = partition (<x) xs
