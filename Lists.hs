@@ -66,3 +66,19 @@ GHCi> squares'n'cubes [3,4,5]
 -}
 squares'n'cubes :: Num a => [a] -> [a]
 squares'n'cubes = concatMap (\x -> [x^2, x^3])
+
+{-
+Воспользовавшись функциями map и concatMap, определите функцию perms,
+которая возвращает все перестановки, которые можно получить из данного списка, в любом порядке.
+
+GHCi> perms [1,2,3]
+[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+-}
+
+perms :: [a] -> [[a]]
+perms []     = [[]]
+perms [x]    = [[x]]
+perms (x:xs) = ins x `concatMap` perms xs
+  where
+    ins :: a -> [a] -> [[a]]
+    ins x y = map (\p -> (take p y) ++ [x] ++ (drop p y)) [0..(length y)]

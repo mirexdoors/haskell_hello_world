@@ -195,3 +195,27 @@ digs n = digs (n `div` 10) ++ [n `mod` 10]
 digitalRoot x  | length ((show::Integer->String) (sum (digs x))) < 2 = sum (digs x)
                | otherwise = digitalRoot (sum (digs x))
 
+{-
+Let us consider this example (array written in general format):
+
+ls = [0, 1, 3, 6, 10]
+
+Its following parts:
+
+ls = [0, 1, 3, 6, 10]
+ls = [1, 3, 6, 10]
+ls = [3, 6, 10]
+ls = [6, 10]
+ls = [10]
+ls = []
+The corresponding sums are (put together in a list): [20, 20, 19, 16, 10, 0]
+
+The function parts_sums (or its variants in other languages) will take as parameter a list ls and return a list of the sums of its parts as defined above.
+-}
+partsSum :: [Integer] -> [Integer]
+partsSum [] = [0]
+partsSum list = scanr (+) 0 list
+
+-- bad solution with lazy evals
+--partsSum list (head list + (sum (tail list))) : partsSum  (tail list)
+
