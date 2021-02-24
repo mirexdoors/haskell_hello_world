@@ -27,11 +27,18 @@ main = do
 collectLabels txt = let matches = (txt =~ "@label\\{([^}]*)\\}" :: [[String]] ) in map (!!1) matches
 
 replaceLabels labelList = lines >>> map words >>> map (map process) >>> map unwords >>> unlines
-  where process w | isInfixOf "@label{" w = replace ""     w
-                  | isInfixOf "@ref{"   w = replace "see " w
-                  | otherwise             = w
-		replace prepend w = let [[_,prefix,label,suffix]] = ( w =~ "(.*)@.*\\\\{([^}]*)\\\\}(.*)" :: [[String]] )
-							   in prefix ++ prepend ++ "[" ++ idx label ++ "]" ++ suffix
-		idx l = case elemIndex l labelList of
-			Just x  -> show (x+1)
-			Nothing -> error $ "Label "++l++" is not defined"
+   where process w | isInfixOf "@label{" w = replace ""     w
+                   | isInfixOf "@ref{"   w = replace "see " w
+                   | otherwise             = w
+
+         -- Эта функция заменяет ссылку/метку в слове `w' на ее [номер], предваряя [номер] строкой `prepend'
+         replace prepend w =
+           -- Слово "Введение@label{aaaa}." будет разбито на части "Введение", "aaa" и ".",
+           -- из которых мы потом соберем результат.
+           let [[_, prefix, label, suffix]] = ( w =~ "(.*)@.*\\\\{([^}]*)\\\\}(.*)" :: [[String]] )
+               in prefix ++ prepend ++ "[" ++ idx label ++ "]" ++ suffix
+
+         -- Возвращает позицию `l' в списке `labelList' (нумерация начинается с 1).
+         idx l = case elemIndex l labelList of
+                      Just x  -> show (x+1)
+                      Nothing -> error $ "Label "++l++" is not defined"
