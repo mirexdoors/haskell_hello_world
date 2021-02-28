@@ -218,4 +218,24 @@ partsSum list = scanr (+) 0 list
 
 -- bad solution with lazy evals
 --partsSum list (head list + (sum (tail list))) : partsSum  (tail list)
+---------------------------------------------------------------------------------
+{-
+Write a function toWeirdCase (weirdcase in Ruby) that accepts a string, and returns the same string with all even indexed characters in each word upper cased,
+and all odd indexed characters in each word lower cased. The indexing just explained is zero based, so the zero-ith index is even, therefore that character should be upper cased.
 
+The passed in string will only consist of alphabetical characters and spaces(' ').
+ Spaces will only be present if there are multiple words. Words will be separated by a single space(' ').
+
+Examples:
+toWeirdCase "String"            `shouldBe` "StRiNg"
+toWeirdCase "Weird string case" `shouldBe` "WeIrD StRiNg CaSe"
+-}
+
+toWeirdCase :: String -> String
+toWeirdCase [] = []
+toWeirdCase str = unwords (map (\x -> toWeirdCaseHelper x) (words str))
+
+toWeirdCaseHelper :: String -> String
+toWeirdCaseHelper [] = []
+toWeirdCaseHelper [x] = [Char.toUpper x]
+toWeirdCaseHelper (x:xs) = Char.toUpper x : Char.toLower (head xs ) : toWeirdCaseHelper (tail xs)

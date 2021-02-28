@@ -109,3 +109,15 @@ GHCi> max3 "AXZ" "YDW" "MLK"
 largest a b c = max a (max b c)
 max3 :: Ord a => [a] -> [a] -> [a] -> [a]
 max3 a b c = zipWith3 (largest)  a b c
+--------------------------------------------------------------------------------------
+{-
+Реализуйте c использованием функции zipWith функцию fibStream, возвращающую бесконечный список чисел Фибоначчи.
+
+GHCi> take 10 $ fibStream
+[0,1,1,2,3,5,8,13,21,34]
+  [0,1]
+
+
+-}
+fibStream :: [Integer]
+fibStream = 0 : 1  :  zipWith (+) fibStream (tail fibStream)
