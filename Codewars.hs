@@ -239,3 +239,13 @@ toWeirdCaseHelper :: String -> String
 toWeirdCaseHelper [] = []
 toWeirdCaseHelper [x] = [Char.toUpper x]
 toWeirdCaseHelper (x:xs) = Char.toUpper x : Char.toLower (head xs ) : toWeirdCaseHelper (tail xs)
+
+--------------------------------------------------------------------------------
+{-
+Count the number of Duplicates
+Write a function that will return the count of distinct case-insensitive alphabetic characters and numeric digits that occur more than once in the input string.
+The input string can be assumed to contain only alphabets (both uppercase and lowercase) and numeric digits.
+-}
+duplicateCount :: String -> Int
+duplicateCount = length . filter (>1) . map length . group . sort . map toLower
+
