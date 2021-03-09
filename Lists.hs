@@ -121,3 +121,42 @@ GHCi> take 10 $ fibStream
 -}
 fibStream :: [Integer]
 fibStream = 0 : 1  :  zipWith (+) fibStream (tail fibStream)
+
+-----------------------------------------------------------------------------------------
+
+data Odd = Odd Integer
+  deriving (Eq, Show)
+
+instance Enum Odd where
+ succ (Odd x) = Odd $ x + 2
+ pred (Odd x) = Odd $ x - 2
+ toEnum x = Odd $ toInteger x * 2 + 1
+ fromEnum (Odd x) = quot (fromInteger x - 1) 2
+ enumFrom = iterate succ
+ enumFromThen (Odd x) (Odd y) = map Odd [x, y ..]
+ enumFromTo (Odd x) (Odd y) = map Odd [x, x + 2 .. y]
+ enumFromThenTo (Odd x) (Odd y) (Odd z) = map Odd [x , y .. z]
+
+-------------------------------------------------------------------------------
+
+{-
+Пусть есть список положительных достоинств монет coins, отсортированный по возрастанию.
+Воспользовавшись механизмом генераторов списков, напишите функцию change, которая разбивает переданную ей положительную сумму денег на монеты достоинств из списка coins всеми возможными способами.
+Например, если coins = [2, 3, 7]:
+
+
+GHCi> change 7
+[[2,2,3],[2,3,2],[3,2,2],[7]]
+
+Примечание. Порядок монет в каждом разбиении имеет значение, то есть наборы [2,2,3] и [2,3,2] — различаются.
+Список coins определять не надо.
+-}
+coins = [2, 3, 7]
+
+change :: (Ord a, Num a) => a -> [[a]]
+change n | n < 0     = []
+         | n == 0    = [[]]
+         | otherwise = [ x : xs | x <- coins, xs <- change (n - x) ]
+
+
+
