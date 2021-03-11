@@ -250,3 +250,53 @@ The input string can be assumed to contain only alphabets (both uppercase and lo
 --duplicateCount = length . filter (>1) . map length . group . sort . map toLower
 duplicateCount =length . filter (>1) .  map length . group . sort . map Char.toLower
 
+------------------------------------------------
+{-
+Write a small function that returns the values of an array that are not odd.
+
+All values in the array will be integers. Return the good values in the order they are given.
+
+noOdds :: Integral n => [n] -> [n]
+-}
+noOdds :: Integral n => [n] -> [n]
+noOdds = filter (even)
+
+---------------------------------------------------
+{-
+A simple kata, my first.
+simply tranform an array into a string, like so:
+
+  transform [ 5, 7, 8, 9, 0, 5 ] -> "578905"
+-}
+
+transform :: Show a => [a] -> String
+transform [] = ""
+transform (x:xs) = show x ++ transform xs
+
+---------------------------------------------------
+{-
+#Find the missing letter
+
+Write a method that takes an array of consecutive (increasing) letters as input and that returns the missing letter in the array.
+
+You will always get an valid array. And it will be always exactly one letter be missing. The length of the array will always be at least 2.
+The array will always contain letters in only one case.
+
+Example:
+
+['a','b','c','d','f'] -> 'e' ['O','Q','R','S'] -> 'P'
+
+["a","b","c","d","f"] -> "e"
+["O","Q","R","S"] -> "P"
+(Use the English alphabet with 26 letters!)
+
+Have fun coding it and please don't forget to vote and rank this kata! :-)
+
+I have also created other katas. Take a look if you enjoyed this kata!
+-}
+
+getNextLetter :: Char -> Char
+getNextLetter c = Char.chr (Char.ord c + 1)
+
+findMissingLetter :: [Char] -> Char
+findMissingLetter (c:cs) = if (head cs == getNextLetter c) then findMissingLetter cs else getNextLetter c
