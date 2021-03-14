@@ -122,6 +122,18 @@ GHCi> take 10 $ fibStream
 fibStream :: [Integer]
 fibStream = 0 : 1  :  zipWith (+) fibStream (tail fibStream)
 
+--------------------------------------
+{-
+Предположим, что функция repeat, была бы определена следующим образом:
+repeat = iterate repeatHelper
+определите, как должна выглядеть функция repeatHelper.
+-}
+repeat1 :: a -> [a]
+repeat1 = iterate repeatHelper
+
+
+repeatHelper = \x -> x
+
 -----------------------------------------------------------------------------------------
 
 data Odd = Odd Integer
@@ -151,12 +163,29 @@ GHCi> change 7
 Примечание. Порядок монет в каждом разбиении имеет значение, то есть наборы [2,2,3] и [2,3,2] — различаются.
 Список coins определять не надо.
 -}
-coins = [2, 3, 7]
+coins ::(Ord a, Num a) => [a]
+coins = [5,9,13]
 
 change :: (Ord a, Num a) => a -> [[a]]
-change n | n < 0     = []
-         | n == 0    = [[]]
-         | otherwise = [ x : xs | x <- coins, xs <- change (n - x) ]
+change 0 = [[]]
+change amount = [ c:cs |c<-coins, amount>=c, cs<-change (amount - c) ]
 
 
+------------------------------------------
+{-
+Напишите реализацию функции concatList через foldr
 
+GHCi> concatList [[1,2],[],[3]]
+[1,2,3]-}
+concatList :: [[a]] -> [a]
+concatList = foldr (++) []
+
+------------------------------------------
+{-
+Используя функцию foldr, напишите реализацию функции lengthList, вычисляющей количество элементов в списке.
+
+GHCi> lengthList [7,6,5]
+3-}
+
+lengthList :: [a] -> Int
+lengthList = foldr (\_ s -> s + 1) 0
