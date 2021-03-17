@@ -202,3 +202,17 @@ GHCi> sumOdd [2,5,30,37]
 
 sumOdd :: [Integer] -> Integer
 sumOdd = foldr (\x s -> if (odd x) then s + x else s) 0
+
+--------------------------------------------
+{-Реализуйте функцию meanList, которая находит среднее значение элементов списка, используя однократный вызов функции свертки.
+
+GHCi> meanList [1,2,3,4]
+2.5
+Постобработка считается допустимой, то есть предполагаемая реализация функции meanList имеет вид
+
+meanList = someFun . foldr someFoldingFun someIni-}
+
+meanList :: [Double] -> Double
+meanList list = foldr (\x s -> (x /  fromIntegral ((length list))) + s) 0 list
+
+
