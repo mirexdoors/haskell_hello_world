@@ -203,7 +203,7 @@ GHCi> sumOdd [2,5,30,37]
 sumOdd :: [Integer] -> Integer
 sumOdd = foldr (\x s -> if (odd x) then s + x else s) 0
 
---------------------------------------------
+---------------------------------------------------------------
 {-Реализуйте функцию meanList, которая находит среднее значение элементов списка, используя однократный вызов функции свертки.
 
 GHCi> meanList [1,2,3,4]
@@ -215,4 +215,15 @@ meanList = someFun . foldr someFoldingFun someIni-}
 meanList :: [Double] -> Double
 meanList list = foldr (\x s -> (x /  fromIntegral ((length list))) + s) 0 list
 
+------------------------------------------------
+{-Используя однократный вызов свертки, реализуйте функцию evenOnly, которая выбрасывает из списка элементы, стоящие на нечетных местах, оставляя только четные.
 
+GHCi> evenOnly [1..10]
+[2,4,6,8,10]
+GHCi> evenOnly ['a'..'z']
+"bdfhjlnprtvxz"-}
+
+getOddPairs l= filter (odd . fst) (zip [0..] l)
+
+evenOnly :: [a] -> [a]
+evenOnly l = foldr (\x s -> snd x : s) [] (getOddPairs l)
