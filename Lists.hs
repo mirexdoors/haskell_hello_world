@@ -227,3 +227,13 @@ getOddPairs l= filter (odd . fst) (zip [0..] l)
 
 evenOnly :: [a] -> [a]
 evenOnly l = foldr (\x s -> snd x : s) [] (getOddPairs l)
+
+------------------------------------------------------
+{-
+Напишите реализацию функции, возвращающей последний элемент списка, через foldl1.
+
+lastElem :: [a] -> a
+lastElem = foldl1 undefined-}
+
+lastElem :: [a] -> a
+lastElem = foldl1 (flip const)
