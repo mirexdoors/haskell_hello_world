@@ -324,3 +324,42 @@ findNb m
     where
         intSqrt = floor . sqrt . fromIntegral
         root = intSqrt (intSqrt m * 2)
+
+-----------------------------------------------------
+
+{-
+Imagine a triangle of numbers which follows this pattern:
+
+Starting with the number "1", "1" is positioned at the top of the triangle. As this is the 1st row, it can only support a single number.
+The 2nd row can support the next 2 numbers: "2" and "3"
+Likewise, the 3rd row, can only support the next 3 numbers: "4", "5", "6"
+And so on; this pattern continues.
+        1
+       2 3
+      4 5 6
+     7 8 9 10
+   11 12 13 14 15
+ 16
+...
+Given N, return the sum of all numbers on the Nth Row:
+
+1 - (1,1) 0
+2-2 (2,3) 1
+3- (4,6) 2
+4   (7,10) 3
+5 - (11,15) 4
+6 - 16,21  5
+
+1 <= N <= 10,000-}
+
+cumulativeTriangle :: Integer -> Integer
+cumulativeTriangle n = sumRange (getStartSequence n)
+
+--сначала напишем функцию, считающую сумму в промежутке
+sumRange :: (Integer, Integer) -> Integer
+sumRange (a,b) =  if a < b then a + sumRange ((a + 1), b) else b
+
+getStartSequence :: Integer -> (Integer, Integer)
+getStartSequence 1 = (1,1)
+getStartSequence 2 = (2,3)
+getStartSequence a = (,) ((fst (getStartSequence (a - 1))) + (a - 1)) (snd (getStartSequence (a - 1)) + a)
