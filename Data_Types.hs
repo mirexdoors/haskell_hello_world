@@ -71,3 +71,16 @@ distanceToOrigin (Point x y) = sqrt (x ^ 2 + y ^ 2)
 
 distance :: Point -> Point -> Double
 distance (Point a b) (Point x y) = sqrt ((a - x)**2 + (b - y)**2)
+
+-------------------------------------------------------------
+{-Определим тип фигур Shape:
+
+data Shape = Circle Double | Rectangle Double Double
+У него два конструктора: Circle r — окружность радиуса r, и Rectangle a b — прямоугольник с размерами сторон a и b.
+ Реализуйте функцию area, возвращающую площадь фигуры.-}
+
+data Shape = Circle Double | Rectangle Double Double deriving Show
+
+area :: Shape -> Double
+area (Circle r) = pi * (r ** 2)
+area (Rectangle a b) = a * b
