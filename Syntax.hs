@@ -40,3 +40,19 @@ updateLastName person1 person2 = person2 {lastName = lastName person1 }
 
 person1 = Person {firstName = "Ivan", lastName = "Ivanov", age = 11 }
 person2 = Person {firstName = "Mikhail", lastName = "Mikhailov", age = 2 }
+person3 = Person {firstName = "Mi", lastName = "Mikhailov", age = 2 }
+
+
+------------------------------------------------------------------------------------------------------
+
+{-
+Определить функцию abbrFirstName, которая сокращает имя до первой буквы с точкой, то есть, если имя было "Ivan", то после применения этой функции оно превратится в "I.".
+Однако, если имя было короче двух символов, то оно не меняется.-}
+
+abbrFirstName :: Person -> Person
+abbrFirstName p
+	 | (length $ firstName p) > 2 = p { firstName = cut $ firstName p }
+	 | otherwise = p
+
+cut :: String -> String
+cut str= take 2 str ++ "."
