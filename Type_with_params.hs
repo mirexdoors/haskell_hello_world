@@ -8,8 +8,7 @@ distance :: Coord Double -> Coord Double -> Double
 distance c1 c2 = sqrt $ (x c2 - x c1)^2 + (y c2 - y c1)^2
 
 manhDistance :: Coord Int -> Coord Int -> Int
-manhDistance c1 c2 = fromIntegral (getLength (x c1) (x c2) + getLength (y c1)  (y c2))
-						where getLength a b = if (b - a) >= 0 then b-a else a-b
+manhDistance (Coord x1 y1) (Coord x2 y2) = (abs (x1-x2)) + (abs (y1-y2))
 
 coord1 = Coord {x = 0.0, y = 3.0}
 coord2 = Coord {x = 0.0, y = 4.0}
