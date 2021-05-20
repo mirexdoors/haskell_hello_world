@@ -1,3 +1,5 @@
+import Data.Char
+import Data.List
 {-
 Реализуйте функции distance, считающую расстояние между двумя точками с вещественными координатами,
  и manhDistance, считающую манхэттенское расстояние между двумя точками с целочисленными координатами.-}
@@ -15,3 +17,12 @@ coord2 = Coord {x = 0.0, y = 4.0}
 
 manhCoord1 = Coord {x = 1, y = 3}
 manhCoord2 = Coord {x = 1, y = 4}
+
+--------------------------------------------
+{-
+Реализуйте функцию, которая ищет в строке первое вхождение символа, который является цифрой, и возвращает Nothing, если в строке нет цифр.
+-}
+
+findDigit :: [Char] -> Maybe Char
+findDigit (x:xs) = if (isDigit x) then Just x  else findDigit xs
+findDigit [] =  Nothing
