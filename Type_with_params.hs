@@ -26,3 +26,35 @@ manhCoord2 = Coord {x = 1, y = 4}
 findDigit :: [Char] -> Maybe Char
 findDigit (x:xs) = if (isDigit x) then Just x  else findDigit xs
 findDigit [] =  Nothing
+----------------
+{-Реализуйте функцию findDigitOrX, использующую функцию findDigit (последнюю реализовывать не нужно).
+findDigitOrX должна находить цифру в строке, а если в строке цифр нет, то она должна возвращать символ 'X'.
+ Используйте конструкцию case.-}
+
+findDigitOrX :: [Char] -> Char
+findDigitOrX str = case findDigit str of
+                                     Just x  ->  x
+                                     Nothing -> 'X'
+
+-----------------------------------------
+{-Maybe можно рассматривать как простой контейнер, например, как список длины 0 или 1.
+ Реализовать функции maybeToList и listToMaybe, преобразующие Maybe a в [a] и наоборот (вторая функция отбрасывает все элементы списка, кроме первого).-}
+
+maybeToList :: Maybe a -> [a]
+maybeToList x  = case x of
+						Just x -> [x]
+						Nothing -> []
+
+listToMaybe :: [a] -> Maybe a
+listToMaybe (x:xs) = Just x
+listToMaybe [] = Nothing
+
+----------------------------------------------
+{-
+
+Реализуйте функцию parsePerson, которая разбирает строки вида firstName = John\nlastName = Connor\nage = 30 и возвращает либо результат типа Person, либо ошибку типа Error.
+
+Строка, которая подается на вход, должна разбивать по символу '\n' на список строк, каждая из которых имеет вид X = Y. Если входная строка не имеет указанный вид, то функция должна возвращать ParsingError.
+Если указаны не все поля, то возвращается IncompleteDataError.
+Если в поле age указано не число, то возвращается IncorrectDataError str, где str — содержимое поля age.
+Если в строке присутствуют лишние поля, то они игнорируются.-}
