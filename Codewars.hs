@@ -363,3 +363,26 @@ getStartSequence :: Integer -> (Integer, Integer)
 getStartSequence 1 = (1,1)
 getStartSequence 2 = (2,3)
 getStartSequence a = (,) ((fst (getStartSequence (a - 1))) + (a - 1)) (snd (getStartSequence (a - 1)) + a)
+
+------------------------------------------------------------------
+{-
+We need prime numbers and we need them now!
+
+Write a method that takes a maximum bound and returns all primes up to and including the maximum bound.
+
+For example,
+
+11 => [2, 3, 5, 7, 11]-}
+
+prime :: Int -> [Int]
+prime n = [x | x <- [2..n], length (factors x) < 3 ]
+
+-- найдем все делители числа
+factors n = [x | x <- [1..n], mod n x == 0]
+--------------------------------------------
+{-
+Write a function that takes a string of parentheses, and determines if the order of the parentheses is valid.
+ The function should return true if the string is valid, and false if it's invalid.-}
+
+validParentheses :: String -> Bool
+validParentheses = error "todo: validParentheses"
