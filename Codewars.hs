@@ -386,3 +386,52 @@ Write a function that takes a string of parentheses, and determines if the order
 
 validParentheses :: String -> Bool
 validParentheses = error "todo: validParentheses"
+
+
+----------------------------------------
+{-
+Given a number, find the permutation with the smallest absolute value (no leading zeros).
+
+-20 => -20
+-32 => -23
+0 => 0
+10 => 10
+29394 => 23499
+The input will always be an integer.-}
+
+minPermutation :: Int -> Int
+minPermutation = scanString . moveZero . sort . show
+
+moveZero :: [Char] -> [Char]
+moveZero [x] = [x]
+moveZero ('-': xs) = '-' : moveZero xs
+moveZero (x:xs) = moveZ 0  (x:xs)
+
+moveZ :: Int -> [Char] -> [Char]
+moveZ n (x:xs) = if x == '0' then  moveZ (n + 1) xs else ((x : (take  n (repeat '0'))) ++ xs)
+moveZ 0 [x] = [x]
+
+
+scanChar :: Char -> Int
+scanChar c | '0' <= c && c <= '9' = fromEnum c - fromEnum '0'
+           | otherwise = -1
+
+scanString :: String -> Int
+scanString = go 0
+    where go a [] = a
+          go a (x:xs) | 0 <= sc && sc <= 9 = go (10*a + sc) xs
+                      | otherwise = (-1) * go a (xs)
+              where sc = scanChar x
+-------------------------------------------------
+
+{-fix is a nice little function:
+
+fix :: (a -> a) -> a
+fix f = let x = f x in x
+But let's make it nicer!
+
+Code length:
+27 characters or less (module line included)-}
+
+fix :: (a -> a) -> a
+fix = fix id

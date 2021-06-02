@@ -50,11 +50,11 @@ listToMaybe (x:xs) = Just x
 listToMaybe [] = Nothing
 
 ----------------------------------------------
-{-
+{-Исправьте ошибку в приведенном коде.
 
-Реализуйте функцию parsePerson, которая разбирает строки вида firstName = John\nlastName = Connor\nage = 30 и возвращает либо результат типа Person, либо ошибку типа Error.
-
-Строка, которая подается на вход, должна разбивать по символу '\n' на список строк, каждая из которых имеет вид X = Y. Если входная строка не имеет указанный вид, то функция должна возвращать ParsingError.
-Если указаны не все поля, то возвращается IncompleteDataError.
-Если в поле age указано не число, то возвращается IncorrectDataError str, где str — содержимое поля age.
-Если в строке присутствуют лишние поля, то они игнорируются.-}
+eitherToMaybe :: Either a -> Maybe a
+eitherToMaybe (Left a) = Just a
+eitherToMaybe (Right _) = Nothing-}
+eitherToMaybe :: Either a b -> Maybe a
+eitherToMaybe (Left a) = Just a
+eitherToMaybe (Right _) = Nothing
