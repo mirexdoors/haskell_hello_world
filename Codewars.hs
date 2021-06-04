@@ -435,3 +435,19 @@ Code length:
 
 fix :: (a -> a) -> a
 fix = fix id
+
+
+------------------------------------------
+{-
+
+Assume "#" is like a backspace in string. This means that string "a#bc#d" actually is "bd"
+Your task is to process a string with "#" symbols.-}
+
+cleanString :: String -> String
+cleanString = reverse . foldl pos ""
+  where pos cs '#' = drop 1 cs
+        pos cs  c  = c : cs
+
+
+
+
