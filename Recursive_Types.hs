@@ -35,10 +35,24 @@ fromNat Zero = 0
 fromNat (Suc n) = fromNat n + 1
 
 add :: Nat -> Nat -> Nat
-add = undefined
+add Zero x = x
+add (Suc x) y = add x (Suc y)
 
 mul :: Nat -> Nat -> Nat
-mul = undefined
+mul Zero _ = Zero
+mul (Suc x) y = add (mul x y) y
 
 fac :: Nat -> Nat
-fac = undefined
+fac Zero = Suc Zero
+fac n1@(Suc n) = mul n1 (fac n)
+
+--------------------------------------------------------------------
+
+{-
+Тип бинарных деревьев можно описать следующим образом:
+
+data Tree a = Leaf a | Node (Tree a) (Tree a)
+
+Реализуйте функцию height, возвращающую высоту дерева, и функцию size,
+ возвращающую количество узлов в дереве (и внутренних, и листьев). Считается, что дерево, состоящее из одного листа, имеет высоту 0.
+ -}
