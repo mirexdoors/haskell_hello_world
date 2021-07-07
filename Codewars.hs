@@ -481,3 +481,12 @@ processTulpesToString =unwords . (map snd)
 -- 3. сортировать [x]
 -- 4 склеить [x]
 
+---------------------------------------------------------------
+
+{-
+There is a large pile of socks that must be paired by color.
+ Given an array of integers representing the color of each sock,
+  determine how many pairs of socks with matching colors there are.-}
+
+solve :: [Int] -> Int
+solve = sum . map (\xs -> length xs `div` 2 ) . group . sort
