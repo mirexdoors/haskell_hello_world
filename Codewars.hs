@@ -435,3 +435,58 @@ Code length:
 
 fix :: (a -> a) -> a
 fix = fix id
+
+
+------------------------------------------
+{-
+
+Assume "#" is like a backspace in string. This means that string "a#bc#d" actually is "bd"
+Your task is to process a string with "#" symbols.-}
+
+cleanString :: String -> String
+cleanString = reverse . foldl pos ""
+  where pos cs '#' = drop 1 cs
+        pos cs  c  = c : cs
+
+---------------------------------------------
+{-
+Your task is to sort a given string. Each word in the string will contain a single number. This number is the position the word should have in the result.
+
+Note: Numbers can be from 1 to 9. So 1 will be the first word (not 0).
+
+If the input string is empty, return an empty string. The words in the input String will only contain valid consecutive numbers.
+
+Examples
+"is2 Thi1s T4est 3a"  -->  "Thi1s is2 3a T4est"
+"4of Fo1r pe6ople g3ood th5e the2"  -->  "Fo1r the2 g3ood 4of th5e pe6ople"
+-}
+
+yourOrderPlease :: String -> String
+yourOrderPlease = processTulpesToString .sortPairs. processWordsForPair . words
+
+processWordsForPair :: [String] -> [(Int, String)]
+processWordsForPair = map (\x -> (getIntCharFromString x, x))
+
+getIntCharFromString :: [Char] -> Int
+getIntCharFromString str = read (filter (\x -> Char.isDigit x) str) :: Int
+
+sortPairs ::  [(Int, String)] ->  [(Int, String)]
+sortPairs =  sortBy (\x y -> if (fst x > fst y ) then  GT else LT)
+
+processTulpesToString ::  [(Int, String)] -> String
+processTulpesToString =unwords . (map snd)
+
+-- 1. превратить строку в массив слов [x]
+-- 2. преврать массив в массив пар [x]
+-- 3. сортировать [x]
+-- 4 склеить [x]
+
+---------------------------------------------------------------
+
+{-
+There is a large pile of socks that must be paired by color.
+ Given an array of integers representing the color of each sock,
+  determine how many pairs of socks with matching colors there are.-}
+
+solve :: [Int] -> Int
+solve = sum . map (\xs -> length xs `div` 2 ) . group . sort
