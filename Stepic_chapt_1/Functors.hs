@@ -1,3 +1,5 @@
+import Data.Maybe
+import Data.Functor
 {-
 Определите представителя класса Functor для следующего типа данных, представляющего точку в трёхмерном пространстве:
 
@@ -43,9 +45,12 @@ Leaf (Just ["a","b"])-}
 
 data Tree a = Leaf (Maybe a) | Branch (Tree a) (Maybe a) (Tree a) deriving Show
 
-tree = Branch(Branch(Leaf Nothing) Nothing (Branch(Leaf (Just "o o o")) (Just "3 3 3") (Leaf (Just "5 5 5")))) (Just "2 2 2") (Leaf (Just "q q q"))
+tree = Branch (Branch (Leaf Nothing) Nothing (Branch(Leaf (Just "o o o")) (Just "3 3 3") (Leaf (Just "5 5 5")))) (Just "2 2 2") (Leaf (Just "q q q"))
 tree' = Branch(Leaf Nothing) (Nothing) (Leaf Nothing)
 
+singleLeaf = Leaf Nothing
+
 instance Functor Tree where
-    fmap func Tree = undefined
+    fmap func (Leaf a) = Leaf (func <$> a)
+    fmap func (Branch l x r) = Branch (fmap func l) (func <$> x) (fmap func r)
 
