@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-
 Нам необходимо написать программу, которая заменит метки их номером (в виде «[1]», «[2]», ...), а ссылки — текстом «см. [1]». Из нашего образца должно получиться:
 
@@ -21,7 +22,7 @@ main = do
    txt <- readFile "sample.txt"
    let numbering = collectLabels txt
    let result = replaceLabels numbering txt
-   writeFile "sample.out" result
+   writeFile "sample.out.txt" result
 
 
 collectLabels txt = let matches = (txt =~ "@label\\{([^}]*)\\}" :: [[String]] ) in map (!!1) matches
@@ -35,7 +36,7 @@ replaceLabels labelList = lines >>> map words >>> map (map process) >>> map unwo
          replace prepend w =
            -- Слово "Введение@label{aaaa}." будет разбито на части "Введение", "aaa" и ".",
            -- из которых мы потом соберем результат.
-           let [[_, prefix, label, suffix]] = ( w =~ "(.*)@.*\\\\{([^}]*)\\\\}(.*)" :: [[String]] )
+           let [[_, prefix, label, suffix]] = ( w =~ "(.*)@.*\\{([^}]*)\\}(.*)" :: [[String]] )
                in prefix ++ prepend ++ "[" ++ idx label ++ "]" ++ suffix
 
          -- Возвращает позицию `l' в списке `labelList' (нумерация начинается с 1).
