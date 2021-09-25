@@ -47,10 +47,12 @@ returnLog :: a -> Log a
 returnLog :: a -> Log a
 returnLog = Log []
 
+<<<<<<< HEAD
 {-Реализуйте фукцию bindLog
 
 bindLog :: Log a -> (a -> Log b) -> Log b
 которая работает подобно оператору >>= для контекста Log.-}
+
 bindLog :: Log a -> (a -> Log b) -> Log b
 bindLog (Log msga a) f = Log (msga ++ msgb) b where
   (Log msgb b) = f a
