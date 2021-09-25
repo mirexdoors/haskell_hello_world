@@ -43,3 +43,5 @@ replaceLabels labelList = lines >>> map words >>> map (map process) >>> map unwo
          idx l = case elemIndex l labelList of
                       Just x  -> show (x+1)
                       Nothing -> error $ "Label "++l++" is not defined"
+
+
