@@ -1,3 +1,4 @@
+import Control.Monad
 {-
 Введём следующий тип:
 
@@ -47,7 +48,6 @@ returnLog :: a -> Log a
 returnLog :: a -> Log a
 returnLog = Log []
 
-<<<<<<< HEAD
 {-Реализуйте фукцию bindLog
 
 bindLog :: Log a -> (a -> Log b) -> Log b
@@ -56,3 +56,33 @@ bindLog :: Log a -> (a -> Log b) -> Log b
 bindLog :: Log a -> (a -> Log b) -> Log b
 bindLog (Log msga a) f = Log (msga ++ msgb) b where
   (Log msgb b) = f a
+
+{-
+Реализованные ранее returnLog и bindLog позволяют объявить тип Log представителем класса Monad:
+
+instance Monad Log where
+    return = returnLog
+    (>>=) = bindLog
+Используя return и >>=, определите функцию execLoggersList
+
+execLoggersList :: a -> [a -> Log a] -> Log a
+которая принимает некоторый элемент, список функций с логированием и возвращает результат последовательного применения всех функций в списке к переданному элементу вместе со списком сообщений, которые возвращались данными функциями:
+
+GHCi> execLoggersList 3 [add1Log, mult2Log, \x -> Log ["multiplied by 100"] (x * 100)]
+Log ["added one","multiplied by 2","multiplied by 100"] 800-}
+
+instance Monad Log where
+    return = returnLog
+    (>>=) = bindLog
+
+instance Functor Log where
+  fmap = liftM
+
+instance Applicative Log where
+  pure = return
+  (<*>) = ap
+
+execLoggersList :: a -> [a -> Log a] -> Log a
+execLoggersList = foldl (>>=) . return
+
+test1 = execLoggersList 3 [add1Log, mult2Log, \x -> Log ["multiplied by 100"] (x * 100)]
