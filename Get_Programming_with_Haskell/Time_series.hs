@@ -63,3 +63,41 @@ ts3 = fileToTS file3
 
 ts4 :: TS Double
 ts4 = fileToTS file4
+
+{-
+Теперь нам нужно научиться "сшивать" временные ряды. Нужна функция, которая принимает два значения TS и возвращает одно
+Мы не можем просто конкатенировать списки, т.к. у нас есть пересекающиеся значения и порядок значений может быть разный.
+Воспользуемся для этого Map
+-}
+-- Вспомогательная функция для вставки данных в Map
+insertMaybePair :: Ord k=> Map.Map k v -> (k, Maybe v) -> Map.Map k v
+insertMaybePair myMap (_, Nothing) = myMap
+insertMaybePair myMap (key, Just value) = Map.insert key value myMap
+
+
+{-
+Теперь мы можем комбинировать все ряды в один
+-}
+combineTS :: TS a -> TS a -> TS a
+combineTS (TS [] []) ts2 = ts2
+combineTS ts1 (TS [] []) = ts1
+combineTS (TS t1 v1) (TS t2 v2) = TS completeTimes combinedValues where
+  bothTimes = mconcat [t1, t2]
+  completeTimes = [minimum bothTimes .. maximum bothTimes]
+  tvMap = foldl insertMaybePair Map.empty (zip t1 v1)
+  updatedMap = foldl insertMaybePair tvMap (zip t2 v2)
+  combinedValues = map (\v -> Map.lookup v updatedMap) completeTimes
+
+instance Semigroup (TS a) where
+  (<>) = combineTS
+
+{-
+Делаем TS экземпляром Monoid, чтобы иметь возможность комбинировать список [TS a] -> TS a
+-}
+instance Monoid (TS a) where
+  mempty = TS [] []
+  mappend = (<>)
+
+tsAll :: TS Double
+tsAll = mconcat [ts1, ts2, ts3, ts4]
+
