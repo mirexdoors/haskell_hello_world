@@ -101,3 +101,107 @@ instance Monoid (TS a) where
 tsAll :: TS Double
 tsAll = mconcat [ts1, ts2, ts3, ts4]
 
+{-
+Реализуем функцию, вычисляющую среднее значение числового списка
+-}
+mean :: (Real a) => [a] -> Double
+mean xs = total/count where
+  total = (realToFrac . sum) xs
+  count = (realToFrac . length) xs
+
+meanTS :: (Real a) => TS a -> Maybe Double
+meanTS (TS _ []) = Nothing
+meanTS (TS times values) =
+  if all (== Nothing) values
+  then Nothing
+  else Just avg
+    where justVals = filter isJust values
+          cleanVals = map fromJust justVals
+          avg = mean cleanVals
+
+{-
+Напишем функцию для сравнения двух значений временного ряда
+-}
+type CompareFunc a = a -> a -> a
+type TSCompareFunc a = (Int, Maybe a) -> (Int, Maybe a) -> (Int, Maybe a)
+
+makeTSCompare :: Eq a => CompareFunc a -> TSCompareFunc a
+makeTSCompare func = newFunc
+  where
+    newFunc (i1, Nothing) (i2, Nothing) = (i1, Nothing)
+    newFunc (_, Nothing) (i, val) = (i, val)
+    newFunc (i, val) (_, Nothing) = (i, val)
+    newFunc (i1, Just val1) (i2, Just val2) =
+      if func val1 val2 == val1
+      then (i1, Just val1)
+      else (i2, Just val2)
+{-
+Теперь мы можем построить общую функцию, которая позволит сравнивать все значения в TS
+-}
+compareTS :: Eq a => (a->a->a) -> TS a -> Maybe (Int, Maybe a)
+compareTS func (TS [] []) = Nothing
+compareTS func (TS times values) =
+  if all (== Nothing) values
+  then Nothing
+  else Just best
+    where
+      pairs = zip times values
+      best = foldl (makeTSCompare func) (0, Nothing) pairs
+
+minTS :: Ord a => TS a -> Maybe (Int, Maybe a)
+minTS = compareTS min
+
+maxTs :: Ord a => TS a -> Maybe (Int, Maybe a)
+maxTs = compareTS max
+
+{-
+Вычислим разности временных рядов (дельты значений)
+-}
+diffPair :: Num a => Maybe a -> Maybe a -> Maybe a
+diffPair _ Nothing = Nothing
+diffPair Nothing _ = Nothing
+diffPair (Just x) (Just y) = Just (x - y)
+
+{-
+Теперь определим функцию требуемого преобразования diffTS
+-}
+diffTS :: Num a => TS a -> TS a
+diffTS (TS [] []) = TS [] []
+diffTS (TS times values) = TS times (Nothing : diffValues)
+  where shiftValues = tail values
+        diffValues = zipWith diffPair shiftValues values
+
+{-
+Теперь мы можем посчитать, например, среднее значений измений в месячных обьемах продаж на протяжение всего промежутка времени
+-}
+avgDiffTS = meanTS (diffTS tsAll)
+
+{-
+Теперь построим функциии для получения скользящего среднего.
+Для начала упрости реализацию последущих функций, опередлим функцию скользящего среднего, которая работает
+со список значений временного ряда вида [Maybe a]
+-}
+
+meanMaybe :: (Real a) => [Maybe a] -> Maybe Double
+meanMaybe vals = if any (== Nothing) vals then Nothing else (Just avg)
+  where avg = mean (map fromJust vals)
+
+movingAvg :: (Real a) => [Maybe a] -> Int -> [Maybe Double]
+movingAvg [] n = []
+movingAvg vals n =
+  if length nextVals == n
+  then meanMaybe nextVals : movingAvg restVals n
+  else []
+    where nextVals = take n vals
+          restVals = tail vals
+
+{-
+Вычисление скользящего среднего с центрированием
+-}
+movingAverageTS :: (Real a) => TS a -> Int -> TS Double
+movingAverageTS (TS [] []) n = TS [] []
+movingAverageTS (TS times values) n = TS times smoothedValues
+  where
+    ma = movingAvg values n
+    nothings = replicate (n `div` 2) Nothing
+    smoothedValues = mconcat [nothings, ma, nothings]
