@@ -1,1 +1,12 @@
+# IDE
 .idea/
+
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+#haskell
+*.o
+*.hi
