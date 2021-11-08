@@ -1,12 +1,8 @@
 # IDE
 .idea/
 
-# Ignore all
-*
-
-# Unignore all with extensions
-!*.*
-
 #haskell
 *.o
 *.hi
+/Get_Programming_with_Haskell/IO/Pizza_calc/pizza
+/Get_Programming_with_Haskell/IO/Sum_lazy/sum_lazy
